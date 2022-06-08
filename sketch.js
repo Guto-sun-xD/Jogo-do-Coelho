@@ -11,7 +11,15 @@ let engine;
 let world;
 var ground;
 var rope;
-var fruit
+var fruit, fruitImg;
+var bgImg, bunnyImg;
+
+function preload()
+{
+  fruitImg = loadImage("assets/melon.png");
+  bgImg = loadImage("assets/background.png");
+  bunnyImg = loadImage("assets/Rabbit-01.png");
+}
 
 function setup() 
 {
@@ -23,6 +31,8 @@ function setup()
   rope = new Rope(5,{x: 50,y:50});
   fruit = Bodies.circle(100,100,25);
   World.add(world,fruit);
+  
+  imageMode(CENTER);
   rectMode(CENTER);
   ellipseMode(RADIUS);
   textSize(50)
@@ -32,11 +42,15 @@ function setup()
 function draw() 
 {
   background(51);
-  ground.show();
+
+  image(bgImg,width/2,height/2,500,700);
+
+
+  //ground.show();
   rope.show();
   
   
-  ellipse(fruit.position.x, fruit.position.y,25);
+  image(fruitImg,fruit.position.x, fruit.position.y,50,50);
   Engine.update(engine);
   
 
