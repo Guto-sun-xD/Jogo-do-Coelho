@@ -13,6 +13,9 @@ var ground;
 var rope;
 var fruit, fruitImg;
 var bgImg, bunnyImg;
+var link;
+var bunny;
+var button;
 
 function preload()
 {
@@ -31,7 +34,16 @@ function setup()
   rope = new Rope(5,{x: 50,y:50});
   fruit = Bodies.circle(100,100,25);
   World.add(world,fruit);
+  link = new Link(rope,fruit);
+  bunny = createSprite(60,620);
+  bunny.addImage(bunnyImg);
+  bunny.scale = 0.22
+  button = createImg("assets/cut_btn.png");
+  button.position(25,40);
+  button.size(60,60);
+  button.mouseClicked(cortar);
   
+
   imageMode(CENTER);
   rectMode(CENTER);
   ellipseMode(RADIUS);
@@ -55,5 +67,10 @@ function draw()
   
 
  
-   
+  drawSprites();
 }
+ function cortar(){
+   rope.break();
+   link.soltar();
+   link = null;
+  }
