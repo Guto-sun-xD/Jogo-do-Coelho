@@ -18,6 +18,7 @@ var bunny;
 var button;
 var blinkImg, eatImg, sadImg;
 
+
 function preload()
 {
   fruitImg = loadImage("assets/melon.png");
@@ -30,6 +31,10 @@ function preload()
   blinkImg.playing = true;
   blinkImg.looping = true;
   //eat e sad
+  eatImg.playing = true;
+  eatImg.looping = false;
+  sadImg.playing = true;
+  sadImg.looping = false;
 }
 
 function setup() 
@@ -42,18 +47,22 @@ function setup()
   rope = new Rope(5,{x: 50,y:50});
   fruit = Bodies.circle(100,100,25);
   World.add(world,fruit);
+  World.add(world,ground)
   link = new Link(rope,fruit);
 
   blinkImg.frameDelay = 20;
   //eat e sad
-  
-  bunny = createSprite(60,620);
+  eatImg.frameDelay = 13;
+  sadImg.frameDelay = 13;
+
+  bunny = createSprite(360,620);
   bunny.addImage(bunnyImg);
   bunny.scale = 0.22;
 
   bunny.addAnimation('piscando',blinkImg);
   bunny.addAnimation('comendo',eatImg);
-  //sad
+  bunny.addAnimation('triste',sadImg);
+
   bunny.changeAnimation('piscando');
 
   button = createImg("assets/cut_btn.png");
@@ -79,16 +88,42 @@ function draw()
   //ground.show();
   rope.show();
   
-  
+  if(fruit != null){
   image(fruitImg,fruit.position.x, fruit.position.y,50,50);
+  }
+
   Engine.update(engine);
   
-
+  if(collide(fruit,bunny) == true){
+    
+    bunny.changeAnimation('comendo');
+    
+  }
  
+  if(collide(fruit,ground.body) == true){
+    
+    bunny.changeAnimation('triste');
+
+  }
+
   drawSprites();
 }
  function cortar(){
    rope.break();
    link.soltar();
    link = null;
+  }
+  function collide(body,sprite){
+  if (body != null){
+    var distance = dist(body.position.x, body.position.y, sprite.position.x, sprite.position.y) 
+    if(distance <= 80){
+      World.remove(world,fruit);
+      fruit = null;
+      return true;
+      
+    }
+    else{
+      return false;
+    } 
+  }
   }
