@@ -10,12 +10,12 @@ const Composite = Matter.Composite;
 let engine;
 let world;
 var ground;
-var rope;
+var rope, rope2, rope3;
 var fruit, fruitImg;
 var bgImg, bunnyImg;
-var link;
+var link, link2, link3;
 var bunny;
-var button;
+var button, button2, button3;
 var blinkImg, eatImg, sadImg;
 var air_sound, cutting_sound, eat_sound, rope_sound, sad_sound, sound;
 var air;
@@ -65,11 +65,15 @@ function setup()
   engine = Engine.create();
   world = engine.world;
   ground = new Ground(200,canH-20,600,20);
-  rope = new Rope(5,{x: 50,y:50});
+  rope = new Rope(5,{x: 60,y:50});
+  rope2 = new Rope(6,{x:200,y:50});
+  rope3 = new Rope(4,{x:273,y:325});
   fruit = Bodies.circle(100,100,25);
   World.add(world,fruit);
   World.add(world,ground)
   link = new Link(rope,fruit);
+  link2 = new Link(rope2,fruit);
+  link3 = new Link(rope3,fruit);
 
   blinkImg.frameDelay = 20;
   //eat e sad
@@ -97,10 +101,20 @@ function setup()
   air.mouseClicked(force);
 
   mute = createImg("assets/mute.png");
-  mute.position(225,20);
+  mute.position(250,20);
   mute.size(60,60);
   mute.mouseClicked(mutar);
   
+  button2 = createImg("assets/cut_btn.png");
+  button2.position(180,30);
+  button2.size(60,60);
+  button2.mouseClicked(cortar2);
+
+  button3 = createImg("assets/cut_btn.png");
+  button3.position(273,305);
+  button3.size(60,60);
+  button3.mouseClicked(cortar3);
+
   sound.play();
   sound.setVolume(0.25);
 
@@ -120,7 +134,10 @@ function draw()
 
   //ground.show();
   rope.show();
-  
+  rope2.show();
+  rope3.show();
+
+
   if(fruit != null){
   image(fruitImg,fruit.position.x, fruit.position.y,50,50);
   }
@@ -185,4 +202,23 @@ function draw()
     sound.play();
     }
   }
+
+  function cortar2(){
+    rope2.break();
+    link2.soltar();
+    link2 = null;
+   
+    cutting_sound.play();
+    cutting_sound.setVolume(0.5);
+ 
+   }
   
+   function cortar3(){
+    rope3.break();
+    link3.soltar();
+    link3 = null;
+   
+    cutting_sound.play();
+    cutting_sound.setVolume(0.5);
+ 
+   }
