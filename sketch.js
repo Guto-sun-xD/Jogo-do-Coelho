@@ -17,7 +17,9 @@ var link;
 var bunny;
 var button;
 var blinkImg, eatImg, sadImg;
-
+var air_sound, cutting_sound, eat_sound, rope_sound, sad_sound, sound;
+var air;
+var mute;
 
 function preload()
 {
@@ -27,6 +29,12 @@ function preload()
   blinkImg = loadAnimation("assets/blink_1.png", "assets/blink_2.png", "assets/blink_3.png");
   eatImg = loadAnimation("assets/eat_0.png", "assets/eat_1.png", "assets/eat_2.png", "assets/eat_3.png", "assets/eat_4.png");
   sadImg = loadAnimation("assets/sad_1.png", "assets/sad_2.png", "assets/sad_3.png");
+  air_sound = loadSound("assets/air.wav");
+  cutting_sound = loadSound("assets/Cutting Through Foliage.mp3");
+  eat_sound = loadSound("assets/eating_sound.mp3");
+  sad_sound = loadSound("assets/sad.wav");
+  sound = loadSound("assets/sound1.mp3");
+  rope_sound = loadSound("assets/rope_cut.mp3");
 
   blinkImg.playing = true;
   blinkImg.looping = true;
@@ -70,6 +78,18 @@ function setup()
   button.size(60,60);
   button.mouseClicked(cortar);
   
+  air = createImg("assets/balloon.png");
+  air.position(325,40);
+  air.size(60,60);
+  air.mouseClicked(force);
+
+  mute = createImg("assets/mute.png");
+  mute.position(225,20);
+  mute.size(60,60);
+  mute.mouseClicked(mutar);
+  
+  sound.play();
+  sound.setVolume(0.25);
 
   imageMode(CENTER);
   rectMode(CENTER);
@@ -97,12 +117,17 @@ function draw()
   if(collide(fruit,bunny) == true){
     
     bunny.changeAnimation('comendo');
-    
+    eat_sound.play();
+    eat_sound.setVolume(0.4);
+
   }
  
-  if(collide(fruit,ground.body) == true){
-    
+  if(fruit != null && fruit.position.y >= 630){
+    fruit = null;
     bunny.changeAnimation('triste');
+    
+    sad_sound.play();
+    sad_sound.setVolume(0.5);
 
   }
 
@@ -112,6 +137,10 @@ function draw()
    rope.break();
    link.soltar();
    link = null;
+  
+   cutting_sound.play();
+   cutting_sound.setVolume(0.5);
+
   }
   function collide(body,sprite){
   if (body != null){
@@ -127,3 +156,20 @@ function draw()
     } 
   }
   }
+
+  function force(){
+    Body.applyForce(fruit,{ x:0, y:0},{ x:0.1 , y:0 });
+    air_sound.play();
+    air_sound.setVolume(0.5);
+  }
+
+  function mutar(){
+    if(sound.isPlaying()){
+    //sound.setVolume(0)
+    sound.stop();
+    }
+    else{
+    sound.play();
+    }
+  }
+  
