@@ -20,6 +20,7 @@ var blinkImg, eatImg, sadImg;
 var air_sound, cutting_sound, eat_sound, rope_sound, sad_sound, sound;
 var air;
 var mute;
+var canW, canH;
 
 function preload()
 {
@@ -47,11 +48,23 @@ function preload()
 
 function setup() 
 {
-  createCanvas(500,700);
+  //createCanvas(500,700);
+  var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  if(isMobile){
+    canW = displayWidth;
+    canH = displayHeight;
+    createCanvas(canW+80,canH);
+  }
+  else{
+    canW = windowWidth;
+    canH = windowHeight;
+    createCanvas(canW,canH);
+  }
+
   frameRate(80);
   engine = Engine.create();
   world = engine.world;
-  ground = new Ground(200,680,600,20);
+  ground = new Ground(200,canH-20,600,20);
   rope = new Rope(5,{x: 50,y:50});
   fruit = Bodies.circle(100,100,25);
   World.add(world,fruit);
@@ -63,7 +76,7 @@ function setup()
   eatImg.frameDelay = 13;
   sadImg.frameDelay = 13;
 
-  bunny = createSprite(360,620);
+  bunny = createSprite(360,canH-80);
   bunny.addImage(bunnyImg);
   bunny.scale = 0.22;
 
@@ -102,7 +115,7 @@ function draw()
 {
   background(51);
 
-  image(bgImg,width/2,height/2,500,700);
+  image(bgImg,width/2,height/2,canW+80,canH);
 
 
   //ground.show();
@@ -122,7 +135,7 @@ function draw()
 
   }
  
-  if(fruit != null && fruit.position.y >= 630){
+  if(fruit != null && fruit.position.y >= canH-70){
     fruit = null;
     bunny.changeAnimation('triste');
     
